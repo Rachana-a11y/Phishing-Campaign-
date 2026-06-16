@@ -416,9 +416,14 @@ The following evidence was collected during the project:
 
 Campaign statistics and monitoring dashboard.
 
+
+
+
 ### Screenshot 2 – Phishing Email
 
 Email received by participants.
+<img width="1532" height="776" alt="image" src="https://github.com/user-attachments/assets/0ba2fec4-934a-45ef-b801-3950c1ce5339" />
+
 
 ### Screenshot 3 – Landing Page
 
@@ -431,6 +436,13 @@ Training page displayed after submission.
 ### Screenshot 5 – Campaign Results
 
 Submission and click statistics.
+
+
+
+
+
+
+
 
 ### Screenshot 6 – Post-Training Results
 
