@@ -1,491 +1,185 @@
-# Phishing Awareness Simulation Using GoPhish
+# Phishing Awareness Simulation
 
-**Cybersecurity Internship Project | Naviotech Solutions | June 2026**
+A controlled, authorized phishing simulation built with **GoPhish** to study employee susceptibility to credential-harvesting attacks. Conducted as part of the Cybersecurity Internship at **Naviotech Solution Pvt. Ltd.**
 
-> ⚠️ **Educational Use Only**
->
-> This project was conducted entirely in a controlled laboratory environment using authorized test participants and test accounts. No real users, organizations, or external systems were targeted. This project was performed solely for cybersecurity awareness and educational purposes.
+> ⚠️ **Disclaimer:** This project was carried out strictly in an isolated lab environment (Kali Linux VM, local GoPhish instance) for educational purposes. No real users, third-party platforms, or production systems were targeted. Do not use this repository to conduct unauthorized phishing campaigns — that is illegal.
 
 ---
 
-# Table of Contents
+## 📋 Project Overview
 
-- [Project Overview](#project-overview)
-- [Objectives](#objectives)
-- [System Requirements](#system-requirements)
-- [Tools & Technologies](#tools--technologies)
-- [Project Architecture](#project-architecture)
-- [Project Structure](#project-structure)
-- [Setup & Configuration](#setup--configuration)
-- [Campaign Workflow](#campaign-workflow)
-- [Results](#results)
-- [Key Findings](#key-findings)
-- [Security Recommendations](#security-recommendations)
-- [Post-Simulation Awareness Training](#post-simulation-awareness-training)
-- [Challenges Encountered](#challenges-encountered)
-- [Skills Demonstrated](#skills-demonstrated)
-- [Screenshots](#screenshots)
-- [Future Improvements](#future-improvements)
-- [Learning Outcomes](#learning-outcomes)
-- [Disclaimer](#disclaimer)
+| | |
+|---|---|
+| **Tool Used** | [GoPhish](https://getgophish.com/) (open-source phishing framework) |
+| **Environment** | Kali Linux (Oracle VirtualBox) |
+| **Scenario** | Simulated "Instagram Security Alert" phishing email |
+| **Targets** | 2 simulated users (Premium Member, VIP) |
+| **Goal** | Measure click-through and credential-submission rates; identify awareness gaps |
+
+The simulation replicates a real-world social engineering attack chain — from a spoofed sender identity, to an urgent phishing email, to a cloned login page that harvests credentials — entirely within a sandboxed lab.
 
 ---
 
-# Project Overview
+## 🛠️ Setup
 
-Phishing remains one of the most effective social engineering techniques used by attackers to steal credentials and gain unauthorized access to systems. This project demonstrates a controlled phishing awareness simulation using **GoPhish**, an open-source phishing framework.
+### 1. Target Group
+A group named `Instagram Security` was created in GoPhish with 2 test users:
 
-The simulation involved creating a phishing email campaign, deploying a simulated login page, tracking user interactions, and analyzing participant responses. The objective was to evaluate user awareness and demonstrate how phishing attacks operate in real-world scenarios.
+| Name | Email | Role |
+|------|-------|------|
+| Rachana Varma | rachana.appani05@gmail.com | Premium Member |
+| Rakesh varma | appanirachana@gmail.com | VIP |
 
----
-
-# Objectives
-
-- Deploy and configure GoPhish from scratch.
-- Create a phishing email template.
-- Design a phishing landing page.
-- Track email opens, clicks, and submissions.
-- Analyze user behavior during the campaign.
-- Conduct awareness training after the simulation.
-- Recommend security improvements based on findings.
-
----
-
-# System Requirements
-
-| Component | Requirement |
-|------------|------------|
-| Operating System | Kali Linux / Ubuntu Linux |
-| RAM | Minimum 2 GB |
-| Virtualization | Oracle VirtualBox |
-| Framework | GoPhish |
-| SMTP Service | Gmail SMTP or MailHog |
-| Browser | Firefox |
-| Web Server | Python HTTP Server |
-
----
-
-# Tools & Technologies
-
-| Tool | Purpose |
-|--------|---------|
-| Kali Linux | Security Testing Environment |
-| GoPhish | Phishing Simulation Platform |
-| HTML/CSS | Landing Page Development |
-| Gmail SMTP | Email Delivery |
-| Python HTTP Server | Hosting Awareness Pages |
-| Firefox | Testing and Validation |
-| Oracle VirtualBox | Virtual Lab Environment |
-
----
-
-# Project Architecture
-
-```text
-Participant
-     │
-     ▼
-Phishing Email
-     │
-     ▼
-GoPhish Tracking Link
-     │
-     ▼
-Landing Page
-     │
-     ▼
-Credential Submission
-     │
-     ▼
-Awareness Page
-     │
-     ▼
-Campaign Analytics Dashboard
-```
-
----
-
-# Project Structure
-
-```text
-phishing-awareness-simulation/
-│
-├── templates/
-│   └── email.html
-│
-├── landing-pages/
-│   ├── index.html
-│   └── awareness.html
-│
-├── screenshots/
-│   ├── dashboard.png
-│   ├── email-template.png
-│   ├── landing-page.png
-│   ├── awareness-page.png
-│   └── results.png
-│
-└── README.md
-```
-
----
-
-# Setup & Configuration
-
-## Step 1 – Install GoPhish
-
-```bash
-mkdir ~/phishing-lab
-cd ~/phishing-lab
-
-wget https://github.com/gophish/gophish/releases/download/v0.12.1/gophish-v0.12.1-linux-64bit.zip
-
-unzip gophish-v0.12.1-linux-64bit.zip
-chmod +x gophish
-```
-
----
-
-## Step 2 – Configure GoPhish
-
-Edit the configuration file:
-
-```bash
-nano config.json
-```
-
-Example configuration:
-
-```json
-{
-  "admin_server": {
-    "listen_url": "127.0.0.1:3333",
-    "use_tls": true
-  },
-  "phish_server": {
-    "listen_url": "0.0.0.0:80",
-    "use_tls": false
-  }
-}
-```
-
-> **Note:** Port 80 requires root privileges. Use port 8080 if running without root access.
-
----
-
-## Step 3 – Launch GoPhish
-
-```bash
-sudo ./gophish
-```
-
-Access the dashboard:
-
-```text
-https://127.0.0.1:3333
-```
-
-Login using the default credentials displayed in the terminal and change the password when prompted.
-
----
-
-## Step 4 – Create the Landing Page
-
-A custom HTML login page was developed to simulate a company login portal.
-
-Features included:
-
-- Responsive design
-- Credential input fields
-- Form submission tracking
-- Awareness redirection page
-
----
-
-## Step 5 – Configure Landing Page in GoPhish
-
-Navigate to:
-
-```text
-Landing Pages → New Page
-```
-
-Configuration:
-
-- Import custom HTML page
-- Enable Capture Submitted Data
-- Enable Capture Passwords
-- Redirect to awareness page after submission
-
----
-
-## Step 6 – Create Email Template
-
-Navigate to:
-
-```text
-Email Templates → New Template
-```
-
-Template Features:
-
-- Simulated IT support message
-- Personalized recipient names
-- Embedded GoPhish tracking links
-- Urgency-based social engineering techniques
-
-GoPhish Variables Used:
-
-```text
-{{.FirstName}}
-{{.URL}}
-```
-
----
-
-## Step 7 – Configure Sending Profile
-
-SMTP Configuration:
-
-| Setting | Value |
-|----------|--------|
-| SMTP Server | smtp.gmail.com |
-| Port | 465 |
-| Encryption | TLS |
-| Authentication | Gmail App Password |
-
-Verify configuration using **Send Test Email** before launching the campaign.
-
----
-
-## Step 8 – Create Target Group
-
-Navigate to:
-
-```text
-Users & Groups → New Group
-```
-
-Add authorized participants who provided informed consent before the simulation.
-
----
-
-## Step 9 – Launch Campaign
-
-Navigate to:
-
-```text
-Campaigns → New Campaign
-```
-
-Configure:
-
+### 2. Sending Profile (SMTP)
 | Field | Value |
-|---------|---------|
-| Email Template | IT Password Reset |
-| Landing Page | Company Portal Login |
-| Sending Profile | Gmail SMTP |
-| Group | Test Participants |
-| URL | Campaign URL |
+|-------|-------|
+| From | `Instagram <hackr.xpert3@gmail.com>` |
+| Host | `smtp.gmail.com:465` |
+| Interface | SMTP (Gmail App Password) |
 
-Click **Launch Campaign** to begin tracking activity.
+### 3. Landing Page
+A cloned Instagram login page was built with:
+- **Capture Submitted Data:** ✅ Enabled
+- **Capture Passwords:** ✅ Enabled
+- **Redirect URL:** `http://www.instagram.com/` (after submission, to avoid suspicion)
 
----
-
-# Campaign Workflow
-
-The phishing simulation followed the workflow below:
-
-1. Phishing email delivered.
-2. Participant opened the email.
-3. Participant clicked the embedded link.
-4. Simulated login page loaded.
-5. User interaction recorded.
-6. Awareness page displayed.
-7. Campaign metrics collected.
-8. Results analyzed.
+### 4. Email Template
+Subject: `⚠️ Unusual login attempt on your account`
+Sender disguised as **Instagram**, using an urgency-based message and a `{{.FirstName}}` merge tag for personalization, with an embedded CTA link to the cloned landing page.
 
 ---
 
-# Results
+## 📊 Results
+
+4 test campaigns were run while refining the template; the final campaign (`instagram`) produced the following results:
 
 | Metric | Count |
-|----------|----------|
-| Emails Sent | 2 |
+|---|---|
+| Emails Sent | 6 |
 | Emails Opened | 1 |
 | Links Clicked | 1 |
 | Credentials Submitted | 1 |
 | Emails Reported | 0 |
 
-## Campaign Statistics
+### Engagement Funnel (2 unique targets)
+| Stage | Users |
+|-------|-------|
+| Email Sent | 2 / 2 |
+| Clicked Link | 1 / 2 (50%) |
+| Submitted Credentials | 1 / 2 (50%) |
+| Reported Phishing | 0 / 2 (0%) |
 
-| Metric | Result |
-|----------|----------|
-| Open Rate | 50% |
-| Click Rate | 50% |
-| Submission Rate | 50% |
-| Reporting Rate | 0% |
+### Timeline — Target "Rakesh varma"
+| Event | Timestamp |
+|-------|-----------|
+| Campaign Created | June 15, 2026, 8:41:13 PM |
+| Email Sent | June 15, 2026, 8:41:19 PM |
+| Clicked Link | June 15, 2026, 8:41:44 PM (**25 sec** after delivery) |
+| Submitted Data | June 15, 2026, 8:42:19 PM |
 
----
-
-# Key Findings
-
-## Social Engineering Remains Effective
-
-A simple phishing email using urgency and authority-based messaging was sufficient to encourage user interaction.
-
-## Rapid Attack Progression
-
-The entire phishing workflow, from email delivery to submission, occurred within a short period of time.
-
-## Mobile Device Vulnerability
-
-Users accessing email on mobile devices were less likely to verify URLs before interacting with the phishing page.
-
-## Lack of Reporting Behavior
-
-No participants reported the suspicious email, highlighting a gap in phishing awareness.
-
-## Importance of Security Training
-
-The results demonstrate the need for continuous phishing awareness programs and security education.
+Captured (lab-only, cleartext per GoPhish default) credentials:
+```
+username: Rachana
+password: password
+```
 
 ---
 
-# Security Recommendations
+## 🧩 MITRE ATT&CK Mapping
 
-## High Priority
-
-- Enable Multi-Factor Authentication (MFA).
-- Conduct regular phishing awareness training.
-- Enforce strong password policies.
-
-## Medium Priority
-
-- Implement SPF, DKIM, and DMARC.
-- Promote safe email practices.
-- Encourage URL verification before clicking links.
-
-## Low Priority
-
-- Improve phishing reporting processes.
-- Develop incident response procedures.
-- Enhance user security awareness resources.
+| Technique ID | Tactic | Technique |
+|---|---|---|
+| T1566.001 | Initial Access | Spearphishing Link |
+| T1598.003 | Reconnaissance | Phishing for Information |
+| T1056.003 | Credential Access | Web Portal Capture |
+| T1078 | Defense Evasion | Valid Accounts (legitimate SMTP relay) |
+| T1204.001 | Execution | User Execution – Malicious Link |
+| T1534 | Lateral Movement | Internal Spearphishing (if extended) |
 
 ---
 
-# Post-Simulation Awareness Training
+## 🔐 Key Findings
 
-After completion of the campaign:
-
-- Participants were informed about the simulation.
-- Common phishing indicators were explained.
-- Safe email handling practices were reviewed.
-- Security awareness materials were distributed.
-- Recommendations were provided for recognizing phishing attempts.
+- **50% click rate** and **50% credential-submission rate** — in line with real-world industry phishing simulation averages.
+- **0% reporting rate** — neither target flagged the email as suspicious, indicating a security awareness gap.
+- The victim clicked the link within **25 seconds** of receiving the email, showing how urgency-based pretexts drive fast, low-scrutiny action.
+- Sender impersonation + urgency + a convincing clone page were sufficient to bypass user judgment without any technical exploit.
 
 ---
 
-# Challenges Encountered
+## ✅ Recommendations
 
-- SMTP configuration and authentication setup.
-- Self-signed certificate warnings in GoPhish.
-- Landing page testing and validation.
-- Email delivery verification.
-- Campaign tracking configuration.
-
----
-
-# Skills Demonstrated
-
-- Phishing Awareness Simulation
-- GoPhish Administration
-- Social Engineering Analysis
-- HTML/CSS Development
-- Security Awareness Training
-- Campaign Analytics
-- Cybersecurity Reporting
-- Security Documentation
+1. **Security Awareness Training** — Regular phishing simulations and staff training on identifying suspicious emails.
+2. **Enable MFA** — Mitigates the impact of credential theft even if phishing succeeds.
+3. **Email Authentication (SPF/DKIM/DMARC)** — Reduces sender-spoofing success rate.
+4. **Link Verification Habits** — Train users to inspect URLs/domains before clicking.
+5. **Easy Reporting Mechanism** — One-click "Report Phishing" buttons to encourage reporting.
+6. **Recurring Simulations** — Quarterly GoPhish campaigns to track improvement over time.
 
 ---
 
-# Screenshots
+## 🧪 Lessons Learned & Challenges
 
-The following evidence was collected during the project:
+| Challenge | Takeaway |
+|---|---|
+| **Traffic visibility** | Routing only Kali VM traffic through monitoring (and not the host browser) can cause assets to go undetected — a gap also seen in a parallel authorized pentest engagement. |
+| **Email deliverability** | Gmail SMTP intermittently triggered spam/security warnings; required header tuning and test sends before the live campaign. |
+| **Believable pretexting** | Early email drafts were too generic — iterated through 4 campaign versions before landing on urgency + impersonation copy that drove a click in 25 seconds. |
+| **Cleartext credential storage** | GoPhish stores captured credentials in cleartext by default, reinforcing why production systems must never log credentials unencrypted. |
+| **Redirect realism** | Redirecting to the real instagram.com post-submission was key — victims had no visual cue anything was wrong. |
+| **Speed of compromise** | Click-to-credential-theft completed in under 60 seconds, underscoring that detection speed matters as much as prevention. |
 
-### Screenshot 1 – GoPhish Dashboard
+## 🧠 Skills Demonstrated
 
-Campaign statistics and monitoring dashboard.
-
-
-
-
-### Screenshot 2 – Phishing Email
-
-Email received by participants.
-<img width="1532" height="776" alt="image" src="https://github.com/user-attachments/assets/0ba2fec4-934a-45ef-b801-3950c1ce5339" />
-
-
-### Screenshot 3 – Landing Page
-
-Simulated login page.
-
-### Screenshot 4 – Awareness Page
-
-Training page displayed after submission.
-
-### Screenshot 5 – Campaign Results
-
-Submission and click statistics.
-
-
-
-
-
-
-
-
-### Screenshot 6 – Post-Training Results
-
-Comparison of user behavior after awareness training.
+- **Offensive Security:** GoPhish campaign configuration, social engineering/pretexting, credential-harvesting page design, SMTP sender impersonation
+- **Tools & Platforms:** Kali Linux, Oracle VirtualBox, Gmail SMTP (App Passwords), HTML/CSS landing page editing
+- **Analysis & Reporting:** MITRE ATT&CK technique mapping, engagement funnel/metrics analysis, timeline reconstruction, professional report and deck writing
 
 ---
 
-# Future Improvements
+## 🎯 Conclusion
 
-- Increase participant sample size.
-- Conduct department-wise phishing assessments.
-- Develop multiple phishing scenarios.
-- Implement automated reporting dashboards.
-- Measure improvements across multiple campaigns.
+This simulation demonstrated a complete, end-to-end credential-phishing attack chain — from sender impersonation to a cloned login page to credential capture — executed entirely within a controlled, authorized lab environment.
 
----
+- **50% click rate** and **50% credential-submission rate**, closely mirroring real-world industry phishing-test benchmarks.
+- **0% reporting rate** — no target flagged the email, exposing a critical detection/reporting gap.
+- The attack succeeded purely through **social engineering** (impersonation + urgency + a convincing clone page), with **no technical exploit** required.
+- **Human behavior is the weakest link** in the security chain; technical controls (SPF/DKIM/DMARC, MFA, email filtering) must be paired with continuous awareness training to meaningfully reduce risk.
+- The project reinforced practical, transferable skills in offensive tooling, attack-chain analysis, and security reporting — directly applicable to SOC analyst and blue-team roles.
 
-# Learning Outcomes
-
-This project provided practical experience in:
-
-- Designing phishing awareness campaigns.
-- Configuring GoPhish infrastructure.
-- Building phishing landing pages.
-- Monitoring user interactions.
-- Analyzing security metrics.
-- Conducting cybersecurity awareness training.
-- Producing professional security documentation.
+**Bottom line:** Phishing remains the #1 initial access vector for real-world breaches. Regular, realistic simulations like this one are one of the most effective ways to measure — and improve — an organization's human firewall.
 
 ---
 
-# Disclaimer
+## 📁 Repository Structure
 
-This project was conducted solely for educational and cybersecurity awareness purposes as part of a cybersecurity internship with Naviotech Solutions.
-
-All activities were performed in an isolated and controlled environment using authorized participants and test accounts. No unauthorized systems, organizations, or individuals were targeted.
-
-Any attempt to reproduce these techniques against systems without explicit written permission may violate applicable cybersecurity and computer misuse laws.
+```
+.
+├── README.md                  # This file
+├── report/
+│   └── Phishing_Awareness_Simulation_Report.pdf
+├── presentation/
+│   └── Phishing_Awareness_Simulation_Rachana.pptx
+└── screenshots/
+    ├── sending_profile_smtp.png
+    ├── landing_page_editor.png
+    ├── campaign_dashboard.png
+    ├── victim_timeline.png
+    └── credentials_captured.png
+```
 
 ---
 
-**Organization:** Naviotech Solutions  
-**Domain:** Cybersecurity  
-**Project Type:** Phishing Awareness Simulation  
-**Internship Period:** June 2026  
-**Author:** [Your Name]
+## 👤 Author
+
+**Rachana Appani**
+B.Tech CSE (Cybersecurity), Malla Reddy Engineering College for Women
+Cybersecurity Intern — Naviotech Solution Pvt. Ltd. (June 2026)
+
+[GitHub](https://github.com/Rachana-a11y) · [LinkedIn](https://linkedin.com/in/rachana-appani)
+
+---
+
+## ⚖️ Ethical Use Statement
+
+This project is intended **solely for educational and authorized security-awareness purposes**. All testing was performed against accounts and infrastructure owned and controlled by the author within an isolated VM environment. No production systems, third-party services, or non-consenting individuals were targeted. Phishing real users without explicit written authorization is illegal under the IT Act, 2000 (India) and equivalent laws elsewhere.
